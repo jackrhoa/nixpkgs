@@ -1,26 +1,32 @@
 {
   lib,
-  fetchzip,
+  fetchurl,
   stdenvNoCC,
   makeWrapper,
+  unzip,
 }:
 let
-  build = "536";
+  build = "597";
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "swiftbar";
-  version = "2.0.1";
+  version = "2.1.1";
 
-  src = fetchzip {
+  src = fetchurl {
     url = "https://github.com/swiftbar/SwiftBar/releases/download/v${finalAttrs.version}/SwiftBar.v${finalAttrs.version}.b${build}.zip";
-    hash = "sha256-K46XQvhLs8rnQ0psveL2dZ/+bTZnaeWVLtrUm29RQYU=";
-    stripRoot = false;
+    hash = "sha256-/N7EkHgtZYcEYwQESVHGPeSaxCL8Y4kqb6st17xwwM0=";
   };
+
+  unpackCmd = "unzip -qq $curSrc -x '*/._*'";
+  sourceRoot = ".";
 
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+  ];
 
   installPhase = ''
     runHook preInstall
